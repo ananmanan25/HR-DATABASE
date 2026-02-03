@@ -55,6 +55,72 @@
         .currency-toggle { background: #e2e8f0; padding: 4px; border-radius: 8px; display: flex; gap: 4px; }
         .curr-btn { border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.7rem; }
         .curr-btn.active { background: var(--accent); color: white; }
+        /* --- RESPONSIVE MEDIA QUERIES --- */
+
+/* Tablet & Smaller Screens (max-width: 1024px) */
+@media (max-width: 1024px) {
+    body { flex-direction: column; overflow-y: auto; height: auto; }
+    
+    aside {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+        border-right: none;
+        border-bottom: 1px solid #1e293b;
+    }
+
+    .brand { margin-bottom: 1rem; }
+    
+    .nav-group { 
+        display: flex; 
+        overflow-x: auto; 
+        gap: 8px; 
+        margin-bottom: 1rem; 
+        padding-bottom: 5px;
+    }
+    
+    .nav-label { display: none; } /* Hide labels to save space */
+    
+    .nav-link { 
+        white-space: nowrap; 
+        margin-bottom: 0; 
+        padding: 8px 12px; 
+        font-size: 0.85rem;
+    }
+
+    aside div[style*="margin-top:auto"] {
+        margin-top: 10px !important;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+    }
+
+    main { padding: 1rem; overflow-y: visible; }
+
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* Mobile Devices (max-width: 600px) */
+@media (max-width: 600px) {
+    .stat-grid { grid-template-columns: 1fr; gap: 1rem; }
+    
+    .top-bar { flex-direction: column; align-items: flex-start; gap: 1rem; }
+
+    /* Make tables scrollable horizontally on small screens */
+    .glass-card { overflow-x: auto; padding: 1rem; }
+    
+    table { min-width: 600px; } /* Ensures table content doesn't squish too much */
+
+    .modal-content { width: 95%; margin: 10px; padding: 1.5rem; }
+
+    .page-title { font-size: 1.2rem; }
+
+    /* Fix for the Action buttons in mobile to be more tappable */
+    .btn { padding: 12px; width: 100%; justify-content: center; }
+    
+    .nav-group { -webkit-overflow-scrolling: touch; }
+}
     </style>
 </head>
 <body>
@@ -326,4 +392,5 @@
     window.onload = render;
 </script>
 </body>
+
 </html>
