@@ -11,14 +11,16 @@
             --success: #10b981; --danger: #ef4444; --text-main: #1e293b;
         }
         * { box-sizing: border-box; font-family: 'Inter', system-ui, sans-serif; }
-        body { background: var(--bg); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        body { background: var(--bg); color: var(--text-main); margin: 0; display: flex; height: 100vh; overflow: hidden; flex-direction: row; }
 
+        /* Sidebar */
         aside { width: 280px; background: var(--sidebar); color: white; display: flex; flex-direction: column; padding: 1.5rem; flex-shrink: 0; }
         .brand { font-size: 1.6rem; font-weight: 800; color: #38f838; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 12px; }
         .nav-link { padding: 12px 16px; color: #94a3b8; border-radius: 10px; margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.3s; border: none; background: none; width: 100%; text-align: left; font-size: 1rem; }
         .nav-link:hover { background: #1e293b; color: white; }
         .nav-link.active { border-left: 4px solid #3ef838; background: #1e293b; color: white; }
 
+        /* Main Area */
         main { flex: 1; overflow-y: auto; padding: 2rem; }
         .page-section { display: none; }
         .page-section.active { display: block; animation: fadeIn 0.3s ease; }
@@ -43,136 +45,101 @@
         .btn-p { background: var(--accent); color: white; }
         .btn-d { background: var(--danger); color: white; }
         .modal-overlay { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(34, 44, 66, 0.7); z-index:1000; justify-content:center; align-items:center; backdrop-filter: blur(4px); }
-    /* --- MOBILE RESPONSIVENESS --- */
-@media (max-width: 768px) {
-    body {
-        flex-direction: column; /* Stack sidebar on top of main content */
-        overflow-y: auto;
-    }
 
-    aside {
-        width: 100%;
-        height: auto;
-        padding: 1rem;
-        flex-direction: row;
-        overflow-x: auto; /* Scrollable menu buttons */
-        position: sticky;
-        top: 0;
-        z-index: 1001;
-    }
+        /* --- LOGIN SCREEN STYLE --- */
+        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--sidebar); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .login-box { background: white; padding: 2.5rem; border-radius: 20px; width: 350px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); }
+        .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #e2e8f0; border-radius: 8px; }
+        #app-container { display: none; width: 100%; height: 100vh; }
 
-    .brand {
-        margin-bottom: 0;
-        margin-right: 20px;
-        font-size: 1.2rem;
-    }
-
-    .nav-link {
-        margin-bottom: 0;
-        margin-right: 10px;
-        white-space: nowrap; /* Keep buttons in one line */
-        padding: 8px 12px;
-        font-size: 0.85rem;
-    }
-
-    main {
-        padding: 1rem;
-    }
-
-    /* Stack Stats: 2 per row on mobile */
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
-
-    .stat-card .val {
-        font-size: 1.1rem;
-    }
-
-    /* Make Tables Scrollable */
-    .glass-card {
-        padding: 10px;
-        overflow-x: auto;
-    }
-
-    table {
-        min-width: 600px; /* Forces table to be wide enough to read, user scrolls left/right */
-    }
-
-    .top-bar {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-
-    .btn {
-        width: 100%; /* Buttons become full-width for easy tapping */
-        justify-content: center;
-    }
-
-    /* Modals should take more space on mobile */
-    .modal-overlay .glass-card {
-        width: 90% !important;
-        margin: 10px;
-    }
-}
+        /* --- MOBILE RESPONSIVENESS --- */
+        @media (max-width: 768px) {
+            body { flex-direction: column; overflow-y: auto; }
+            #app-container { flex-direction: column; }
+            aside { width: 100%; height: auto; padding: 1rem; flex-direction: row; overflow-x: auto; position: sticky; top: 0; z-index: 1001; }
+            .brand { margin-bottom: 0; margin-right: 20px; font-size: 1.2rem; }
+            .nav-link { margin-bottom: 0; margin-right: 10px; white-space: nowrap; padding: 8px 12px; font-size: 0.85rem; }
+            main { padding: 1rem; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .stat-card .val { font-size: 1.1rem; }
+            .glass-card { padding: 10px; overflow-x: auto; }
+            table { min-width: 600px; }
+            .top-bar { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .btn { width: 100%; justify-content: center; }
+        }
     </style>
 </head>
 <body>
 
-<aside>
-    <div class="brand"><i class="fas fa-gem"></i> Ananmanan</div>
-    <button class="nav-link active" onclick="showSection('dashboard', this)"><i class="fas fa-chart-line"></i> Dashboard</button>
-    <button class="nav-link" onclick="showSection('inventory', this)"><i class="fas fa-boxes"></i> Products</button>
-    <button class="nav-link" onclick="showSection('sales', this)"><i class="fas fa-shopping-cart"></i> Sales Ledger</button>
-    <button class="nav-link" onclick="showSection('expenses', this)"><i class="fas fa-wallet"></i> Expenses</button>
-    <button class="nav-link" onclick="showSection('payroll', this)"><i class="fas fa-users"></i> Staff & Payroll</button>
-</aside>
-
-<main>
-    <div id="dashboard" class="page-section active">
-        <div class="top-bar"><h1>Executive Overview</h1><button class="btn btn-p" onclick="updateCapital()">Update Capital</button></div>
-        <div class="stats-grid">
-            <div class="stat-card"><h4>Net Worth</h4><div class="val" id="dash-net-worth">Rs. 0</div></div>
-            <div class="stat-card"><h4>Sales Profit</h4><div class="val" id="dash-total-profit">Rs. 0</div></div>
-            <div class="stat-card"><h4>Total Expenses</h4><div class="val" id="dash-total-expenses">Rs. 0</div></div>
-            <div class="stat-card"><h4>Stock Asset</h4><div class="val" id="dash-stock-value">Rs. 0</div></div>
-        </div>
-        <div class="glass-card"><h3 id="dash-cash-flow">Cash Balance: Rs. 0</h3></div>
+<div id="login-screen">
+    <div class="login-box">
+        <div class="brand" style="justify-content: center; color: var(--sidebar); margin-bottom: 1rem;">
+            <i class="fas fa-gem"></i> Welcome Maleesha</div>
+            
+        <p style="color: #64748b; margin-bottom: 1.5rem;">pass word eka dipn nikn yna ba/class wara kanna ymn</p>
+        <input type="text" id="user-input" placeholder="Username">
+        <input type="password" id="pass-input" placeholder="Password">
+        <button class="btn btn-p" onclick="checkLogin()" style="width: 100%; margin-top: 10px; justify-content: center;">Access Suite</button>
+        <p id="login-err" style="color: var(--danger); font-size: 0.8rem; margin-top: 10px; display: none;">Invalid Credentials</p>
     </div>
+</div>
 
-    <div id="inventory" class="page-section">
-        <div class="top-bar"><h1>Inventory</h1><button class="btn btn-p" onclick="addNewStyle()">Add Products</button></div>
-        <div class="glass-card">
-            <table><thead><tr><th>Style Name</th><th>Qty</th><th>Landed Cost</th><th>Retail Price</th><th>Actions</th></tr></thead>
-            <tbody id="product-list"></tbody></table>
-        </div>
-    </div>
+<div id="app-container">
+    <aside>
+        <div class="brand"><i class="fas fa-gem"></i> Ananmanan</div>
+        <button class="nav-link active" onclick="showSection('dashboard', this)"><i class="fas fa-chart-line"></i> Dashboard</button>
+        <button class="nav-link" onclick="showSection('inventory', this)"><i class="fas fa-boxes"></i> Products</button>
+        <button class="nav-link" onclick="showSection('sales', this)"><i class="fas fa-shopping-cart"></i> Sales Ledger</button>
+        <button class="nav-link" onclick="showSection('expenses', this)"><i class="fas fa-wallet"></i> Expenses</button>
+        <button class="nav-link" onclick="showSection('payroll', this)"><i class="fas fa-users"></i> Staff & Payroll</button>
+        <button class="nav-link" style="margin-top: auto; color: #ef4444;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </aside>
 
-    <div id="sales" class="page-section">
-        <div class="top-bar"><h1>Sales Ledger</h1><button class="btn btn-p" onclick="openSaleModal()">Record Sale</button></div>
-        <div class="glass-card">
-            <table><thead><tr><th>Date</th><th>Item</th><th>Qty</th><th>Sale Price</th><th>Profit</th><th>Actions</th></tr></thead>
-            <tbody id="sales-list"></tbody></table>
+    <main>
+        <div id="dashboard" class="page-section active">
+            <div class="top-bar"><h1>Executive Overview</h1><button class="btn btn-p" onclick="updateCapital()">Update Capital</button></div>
+            <div class="stats-grid">
+                <div class="stat-card"><h4>Net Worth</h4><div class="val" id="dash-net-worth">Rs. 0</div></div>
+                <div class="stat-card"><h4>Sales Profit</h4><div class="val" id="dash-total-profit">Rs. 0</div></div>
+                <div class="stat-card"><h4>Total Expenses</h4><div class="val" id="dash-total-expenses">Rs. 0</div></div>
+                <div class="stat-card"><h4>Stock Asset</h4><div class="val" id="dash-stock-value">Rs. 0</div></div>
+            </div>
+            <div class="glass-card"><h3 id="dash-cash-flow">Cash Balance: Rs. 0</h3></div>
         </div>
-    </div>
 
-    <div id="expenses" class="page-section">
-        <div class="top-bar"><h1>Expenses</h1><button class="btn btn-d" onclick="openExpenseModal()">Log Expense</button></div>
-        <div class="glass-card">
-            <table><thead><tr><th>Date</th><th>Category</th><th>Note</th><th>Amount</th><th>Actions</th></tr></thead>
-            <tbody id="expense-list"></tbody></table>
+        <div id="inventory" class="page-section">
+            <div class="top-bar"><h1>Inventory</h1><button class="btn btn-p" onclick="addNewStyle()">Add Products</button></div>
+            <div class="glass-card">
+                <table><thead><tr><th>Style Name</th><th>Qty</th><th>Landed Cost</th><th>Retail Price</th><th>Actions</th></tr></thead>
+                <tbody id="product-list"></tbody></table>
+            </div>
         </div>
-    </div>
 
-    <div id="payroll" class="page-section">
-        <div class="top-bar"><h1>Staff</h1><button class="btn btn-p" onclick="openStaffModal()">Add Staff</button></div>
-        <div class="glass-card">
-            <table><thead><tr><th>Name</th><th>Role</th><th>Salary</th><th>Actions</th></tr></thead>
-            <tbody id="staff-list"></tbody></table>
+        <div id="sales" class="page-section">
+            <div class="top-bar"><h1>Sales Ledger</h1><button class="btn btn-p" onclick="openSaleModal()">Record Sale</button></div>
+            <div class="glass-card">
+                <table><thead><tr><th>Date</th><th>Item</th><th>Qty</th><th>Sale Price</th><th>Profit</th><th>Actions</th></tr></thead>
+                <tbody id="sales-list"></tbody></table>
+            </div>
         </div>
-    </div>
-</main>
+
+        <div id="expenses" class="page-section">
+            <div class="top-bar"><h1>Expenses</h1><button class="btn btn-d" onclick="openExpenseModal()">Log Expense</button></div>
+            <div class="glass-card">
+                <table><thead><tr><th>Date</th><th>Category</th><th>Note</th><th>Amount</th><th>Actions</th></tr></thead>
+                <tbody id="expense-list"></tbody></table>
+            </div>
+        </div>
+
+        <div id="payroll" class="page-section">
+            <div class="top-bar"><h1>Staff</h1><button class="btn btn-p" onclick="openStaffModal()">Add Staff</button></div>
+            <div class="glass-card">
+                <table><thead><tr><th>Name</th><th>Role</th><th>Salary</th><th>Actions</th></tr></thead>
+                <tbody id="staff-list"></tbody></table>
+            </div>
+        </div>
+    </main>
+</div>
 
 <div id="sales-modal" class="modal-overlay"><div class="glass-card" style="width:350px;"><h2>Sale</h2><select id="sale-product-select" class="inline-edit" style="border:1px solid #ccc; margin-bottom:10px;"></select><input type="number" id="sale-qty" class="inline-edit" placeholder="Qty" value="1" style="border:1px solid #ccc;"><input type="number" id="sale-price" class="inline-edit" placeholder="Price" style="border:1px solid #ccc;"><br><br><button class="btn btn-p" onclick="processSale()">Save Sale</button><button onclick="closeModal('sales-modal')">Cancel</button></div></div>
 <div id="expense-modal" class="modal-overlay"><div class="glass-card" style="width:350px;"><h2>Expense</h2><input id="exp-cat" class="inline-edit" placeholder="Category" style="border:1px solid #ccc;"><input type="number" id="exp-amt" class="inline-edit" placeholder="Amount" style="border:1px solid #ccc;"><input type="text" id="exp-note" class="inline-edit" placeholder="Note" style="border:1px solid #ccc;"><br><br><button class="btn btn-d" onclick="saveExpense()">Save Expense</button><button onclick="closeModal('expense-modal')">Cancel</button></div></div>
@@ -194,6 +161,11 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
+    // Global Functions for Buttons
+    window.deleteDoc = deleteDoc;
+    window.doc = doc;
+    window.db = db;
+
     let totals = { capital: 0, salesProfit: 0, expenses: 0, stockValue: 0 };
 
     function refreshDashboard() {
@@ -214,6 +186,20 @@
     };
     window.closeModal = (id) => document.getElementById(id).style.display = 'none';
     window.dbUpdate = async (coll, id, field, val) => { await updateDoc(doc(db, coll, id), { [field]: isNaN(val) ? val : Number(val) }); };
+
+    // AUTH LOGIC
+    window.checkLogin = () => {
+        const user = document.getElementById('user-input').value;
+        const pass = document.getElementById('pass-input').value;
+        if(user === "welcome" && pass === "911") {
+            sessionStorage.setItem("ceelon_auth", "true");
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-container').style.display = 'flex';
+        } else {
+            document.getElementById('login-err').style.display = 'block';
+        }
+    };
+    window.logout = () => { sessionStorage.removeItem("ceelon_auth"); location.reload(); };
 
     // FINANCES
     onSnapshot(doc(db, "finances", "main"), (snap) => { if(snap.exists()){ totals.capital = snap.data().capital || 0; refreshDashboard(); } });
@@ -303,10 +289,14 @@
         });
     });
     window.payStaff = async (n,a) => { if(confirm("Confirm Payment?")) await addDoc(collection(db,"expenses"), {category:"Salaries", amount:a, note:"Paid "+n, date:new Date()}); };
-// Add these to make the Firebase functions accessible to your buttons
-window.deleteDoc = deleteDoc;
-window.doc = doc;
-window.db = db;
+
+    // Auto-check on Page Load
+    window.onload = () => {
+        if(sessionStorage.getItem("ceelon_auth") === "true") {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-container').style.display = 'flex';
+        }
+    };
 </script>
 </body>
 </html>
