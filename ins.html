@@ -7,152 +7,295 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-    
     <style>
-        :root {
+  :root {
+
             --bg: #030712;
+
             --card: rgba(17, 24, 39, 0.7);
+
             --border: rgba(255, 255, 255, 0.08);
+
             --text: #f9fafb;
+
             --text-dim: #9ca3af;
+
             --neon-green: #10b981;
+
             --neon-glow: rgba(16, 185, 129, 0.3);
+
             --accent-blue: #3b82f6;
+
             --gold: #fbbf24;
+
             --danger: #ef4444;
+
             --sidebar-w: 280px;
+
         }
+
+
 
         * { box-sizing: border-box; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); }
 
+
+
         body {
+
             background-color: var(--bg);
-            background-image: 
+
+            background-image:
+
                 radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+
                 radial-gradient(circle at 100% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+
             color: var(--text);
+
             font-family: 'Plus Jakarta Sans', sans-serif;
+
             margin: 0;
+
             display: flex;
+
             min-height: 100vh;
+
             overflow-x: hidden;
+
         }
+
+
 
         /* --- SIDEBAR --- */
+
         aside {
+
             width: var(--sidebar-w);
+
             background: rgba(3, 7, 18, 0.9);
+
             border-right: 1px solid var(--border);
+
             padding: 24px;
+
             display: flex;
+
             flex-direction: column;
+
             backdrop-filter: blur(20px);
+
             position: fixed;
+
             height: 100vh;
+
             z-index: 100;
+
         }
+
+
 
         .logo-area {
+
             font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
+
             display: flex; align-items: center; gap: 12px;
+
             margin-bottom: 48px; color: var(--text);
+
         }
+
+
 
         .logo-area i {
+
             color: var(--neon-green);
+
             filter: drop-shadow(0 0 8px var(--neon-glow));
+
         }
+
+
 
         .nav-link {
+
             display: flex; align-items: center; gap: 12px;
+
             padding: 12px; border-radius: 12px;
+
             color: var(--text-dim); text-decoration: none;
+
             margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;
+
             cursor: pointer;
+
         }
+
+
 
         .nav-link:hover, .nav-link.active {
+
             background: rgba(255,255,255,0.05);
+
             color: var(--text);
+
         }
+
+
 
         /* --- MAIN CONTENT --- */
+
         main {
+
             margin-left: var(--sidebar-w);
+
             flex: 1; padding: 40px;
+
             width: calc(100% - var(--sidebar-w));
+
             max-width: 1400px;
+
         }
+
+
 
         .glass-card {
+
             background: var(--card);
+
             border: 1px solid var(--border);
+
             border-radius: 24px;
+
             padding: 24px;
+
             backdrop-filter: blur(16px);
+
             box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+
         }
 
+
+
         .stats-grid {
+
             display: grid;
+
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+
             gap: 24px; margin-bottom: 32px;
+
         }
+
+
 
         .stat-card h2 { font-family: 'JetBrains Mono', monospace; font-size: 1.75rem; margin: 12px 0 4px 0; }
 
+
+
         /* --- TABLES --- */
+
         .table-container { margin-top: 10px; overflow-x: auto; }
+
         table { width: 100%; border-collapse: separate; border-spacing: 0 8px; min-width: 800px; }
+
         th { padding: 12px 16px; text-align: left; font-size: 0.75rem; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+
         td { background: rgba(255,255,255,0.02); padding: 16px; font-size: 0.95rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
         td:first-child { border-radius: 16px 0 0 16px; border-left: 1px solid var(--border); }
+
         td:last-child { border-radius: 0 16px 16px 0; border-right: 1px solid var(--border); }
+
+
 
         tr.clickable:hover td { background: rgba(255,255,255,0.05); cursor: pointer; border-color: rgba(255,255,255,0.2); }
 
+
+
         /* --- UI ELEMENTS --- */
+
         .btn { padding: 12px 24px; border-radius: 14px; border: none; cursor: pointer; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; }
+
         .btn-p { background: var(--neon-green); color: #000; box-shadow: 0 4px 14px var(--neon-glow); }
-        
-        input, select, textarea { 
-            background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: #fff; 
+
+       
+
+        input, select, textarea {
+
+            background: rgba(0,0,0,0.2); border: 1px solid var(--border); color: #fff;
+
             padding: 14px; border-radius: 12px; width: 100%; outline: none; font-family: inherit;
+
         }
+
+
 
         /* --- MODALS --- */
+
         .modal {
+
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+
             background: rgba(0,0,0,0.6); justify-content: center; align-items: center;
+
             z-index: 1000; backdrop-filter: blur(12px);
+
         }
+
+
 
         .progress-container { width: 100%; height: 10px; background: rgba(255,255,255,0.05); border-radius: 20px; overflow: hidden; }
+
         .progress-bar { height: 100%; background: linear-gradient(90deg, var(--neon-green), var(--accent-blue)); width: 0%; }
 
+
+
         .profile-initials {
+
             width: 70px; height: 70px; background: linear-gradient(135deg, var(--neon-green), var(--accent-blue)); color: #000;
+
             border-radius: 22px; display: flex; align-items: center; justify-content: center;
+
             font-size: 1.8rem; font-weight: 800;
+
         }
 
+
+
         .badge { padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; border: 1px solid transparent; }
+
         .badge-active { background: var(--neon-glow); color: var(--neon-green); border-color: var(--neon-green); }
+
+
 
         #futuristicChart { cursor: zoom-in; }
 
+
+
         /* --- RESPONSIVE HUD --- */
+
         @media (max-width: 1024px) {
+
             aside {
+
                 width: 100%; height: 75px; position: fixed; bottom: 0; left: 0;
+
                 flex-direction: row; padding: 0 10px; border-right: none; border-top: 1px solid var(--border);
+
                 background: rgba(3, 7, 18, 0.95); justify-content: center; align-items: center;
+
             }
+
             .logo-area, aside .glass-card { display: none; }
+
             aside nav { flex-direction: row !important; justify-content: space-around; width: 100%; margin: 0; }
+
             .nav-link { flex-direction: column; gap: 4px; font-size: 0.65rem; padding: 8px; width: 80px; text-align: center; }
+
             main { margin-left: 0; width: 100%; padding-bottom: 100px; }
+
             .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
         }
     </style>
 </head>
@@ -224,7 +367,7 @@
                             <th>Status</th>
                             <th>Principal</th>
                             <th>Current Total</th>
-                            <th>Total Growth</th>
+                            <th>Growth</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -267,22 +410,19 @@
 <div id="investor-modal" class="modal">
     <div class="glass-card" style="width:700px; max-height: 90vh; overflow-y: auto;">
         <h2 style="margin-top:0; letter-spacing: -1px;">Node Onboarding</h2>
-        
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
             <input id="inv-name" placeholder="Legal Name">
-            <input id="inv-index" placeholder="ID Number (e.g. 200813600524)">
+            <input id="inv-index" placeholder="ID Number">
             <input id="inv-email" placeholder="Email Address">
             <input id="inv-address" placeholder="Physical Residence Address">
-            <div class="input-group">
+            <div>
                 <small style="color:var(--text-dim); font-weight:700;">DATE OF BIRTH</small>
                 <input id="inv-dob" type="date" style="margin-top:5px;">
             </div>
-            
             <input id="inv-amt" type="number" placeholder="Principal Amount (Rs.)">
             <input id="inv-perc" type="number" value="20" placeholder="Equity Share %">
-            <textarea id="inv-note" placeholder="Strategic observations / Personal notes..." style="grid-column: span 2; height: 100px;"></textarea>
+            <textarea id="inv-note" placeholder="Strategic observations..." style="grid-column: span 2; height: 100px;"></textarea>
         </div>
-
         <div style="margin-top:30px; display:flex; gap:12px;">
             <button class="btn btn-p" onclick="saveInvestor()" style="flex:2;">INITIALIZE PROTOCOL</button>
             <button class="btn" onclick="closeModal()" style="background:rgba(255,255,255,0.05); color:#fff; flex:1;">ABORT</button>
@@ -290,14 +430,39 @@
     </div>
 </div>
 
-<div id="payout-modal" class="modal">
-    <div class="glass-card" style="width:400px; border-top: 4px solid var(--gold);">
-        <h2>Record Settlement</h2>
-        <select id="pay-inv-select" style="margin-bottom:15px;"></select>
-        <input id="pay-amt-main" type="number" placeholder="Settlement Amount (Rs.)">
+<div id="topup-modal" class="modal">
+    <div class="glass-card" style="width:400px; border-top: 4px solid var(--accent-blue);">
+        <h2 style="margin-top:0;">Capital Injection</h2>
+        <p id="topup-target-name" style="color:var(--text-dim); margin-bottom:20px;"></p>
+        <input id="topup-id-hidden" type="hidden">
+        <small style="color:var(--text-dim)">INJECTION AMOUNT (Rs.)</small>
+        <input id="topup-amt" type="number" placeholder="Enter amount..." style="margin-top:8px;">
         <div style="margin-top:25px; display:flex; gap:12px;">
-            <button class="btn" onclick="processGlobalPayout()" style="background:var(--gold); color:#000; flex:1;">CONFIRM</button>
+            <button class="btn btn-p" onclick="processTopUp()" style="background:var(--accent-blue); flex:1;">INJECT</button>
             <button class="btn" onclick="closeModal()">CANCEL</button>
+        </div>
+    </div>
+</div>
+
+<div id="payout-modal" class="modal">
+    <div class="glass-card" style="width:420px; border-top: 4px solid var(--gold); position: relative;">
+        <h2 style="margin-top:0; letter-spacing: -1px;">Record Settlement</h2>
+        
+        <div style="display: flex; flex-direction: column; gap: 15px; margin-top: 20px;">
+            <div>
+                <small style="color:var(--text-dim); font-weight:700; display:block; margin-bottom:8px;">SELECT ENTITY</small>
+                <select id="pay-inv-select"></select>
+            </div>
+            
+            <div>
+                <small style="color:var(--text-dim); font-weight:700; display:block; margin-bottom:8px;">SETTLEMENT AMOUNT (Rs.)</small>
+                <input id="pay-amt-main" type="number" placeholder="0.00">
+            </div>
+        </div>
+
+        <div style="margin-top:35px; display:flex; gap:12px;">
+            <button class="btn" onclick="processGlobalPayout()" style="background:var(--gold); color:#000; flex:2; justify-content: center;">CONFIRM</button>
+            <button class="btn" onclick="closeModal()" style="background:rgba(255,255,255,0.05); color:#fff; flex:1; justify-content: center;">CANCEL</button>
         </div>
     </div>
 </div>
@@ -320,19 +485,10 @@
     </div>
 </div>
 
-<div id="chart-zoom-modal" class="modal" onclick="closeModal()">
-    <div class="glass-card" style="width: 90vw; height: 80vh;" onclick="event.stopPropagation()">
-        <canvas id="zoomedChart"></canvas>
-    </div>
-</div>
-
-
-
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, addDoc, deleteDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // CONFIG
     const firebaseConfig = {
         apiKey: "AIzaSyA3xSzrOvFFMkPDtxfKQRPBwXfpa2sejKg",
         authDomain: "accountent-a4317.firebaseapp.com",
@@ -348,21 +504,35 @@
     let investorsArray = [];
     let chartInstance = null;
     let simChartInstance = null;
-    let zoomedChartInstance = null;
 
-    // PROTOCOL LOGIC
-    const calculateQuantumGrowth = (principal, timestamp) => {
-        if (!timestamp) return { total: principal, profit: 0 };
+    // --- UPDATED GROWTH ENGINE ---
+    const calculateQuantumGrowth = (investorData) => {
         const now = new Date();
-        const start = new Date(timestamp);
-        let months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
-        if (now.getDate() < start.getDate()) months--;
-        const count = Math.max(0, months);
-        const total = principal * Math.pow(1.08, count);
-        return { total, profit: total - principal };
+        let totalCurrentValue = 0;
+        let totalPrincipal = 0;
+
+        // Support for legacy data (single amount) and new data (contributions array)
+        const contributions = investorData.contributions || [
+            { amount: investorData.amount, timestamp: investorData.timestamp }
+        ];
+
+        contributions.forEach(node => {
+            if (!node.timestamp || !node.amount) return;
+            const start = new Date(node.nodeTimestamp || node.timestamp);
+            let months = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth());
+            if (now.getDate() < start.getDate()) months--;
+            
+            const count = Math.max(0, months);
+            const currentVal = node.amount * Math.pow(1.08, count);
+            
+            totalCurrentValue += currentVal;
+            totalPrincipal += node.amount;
+        });
+
+        return { total: totalCurrentValue, principal: totalPrincipal, profit: totalCurrentValue - totalPrincipal };
     };
 
-    // TABS
+    // --- UI TABS & MODALS ---
     window.showTab = (tab) => {
         document.getElementById('tab-dash').style.display = tab === 'dash' ? 'block' : 'none';
         document.getElementById('tab-sim').style.display = tab === 'sim' ? 'block' : 'none';
@@ -371,7 +541,173 @@
         if(tab === 'sim') runSimulation();
     };
 
-    // SIMULATOR
+    window.openModal = (id) => document.getElementById(id).style.display = 'flex';
+    window.closeModal = () => document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+
+    // --- DATA OPERATIONS ---
+    window.saveInvestor = async () => {
+        const idNum = document.getElementById('inv-index').value;
+        const amt = Number(document.getElementById('inv-amt').value);
+        const now = Date.now();
+
+        const data = {
+            name: document.getElementById('inv-name').value,
+            indexNumber: idNum,
+            password: idNum.slice(-5),
+            email: document.getElementById('inv-email').value,
+            address: document.getElementById('inv-address').value,
+            dob: document.getElementById('inv-dob').value,
+            equity: Number(document.getElementById('inv-perc').value),
+            totalPaid: 0,
+            note: document.getElementById('inv-note').value,
+            contributions: [{ amount: amt, timestamp: now, nodeTimestamp: now }]
+        };
+        
+        try {
+            await addDoc(collection(db, "investors"), data);
+            closeModal();
+        } catch (e) { console.error(e); }
+    };
+
+    window.openTopUp = (id, name) => {
+        document.getElementById('topup-target-name').innerText = `Adding capital for ${name}`;
+        document.getElementById('topup-id-hidden').value = id;
+        document.getElementById('topup-amt').value = "";
+        openModal('topup-modal');
+    };
+
+    window.processTopUp = async () => {
+        const id = document.getElementById('topup-id-hidden').value;
+        const extra = Number(document.getElementById('topup-amt').value);
+        if(!extra || extra <= 0) return;
+
+        try {
+            await updateDoc(doc(db, "investors", id), {
+                contributions: arrayUnion({
+                    amount: extra,
+                    timestamp: Date.now(),
+                    nodeTimestamp: Date.now()
+                })
+            });
+            closeModal();
+        } catch (e) { console.error(e); }
+    };
+
+    window.removeItem = async (id) => { if(confirm("Terminate node?")) await deleteDoc(doc(db, "investors", id)); };
+
+    // --- SYNC ENGINE ---
+    onSnapshot(collection(db, "investors"), (snap) => {
+        const list = document.getElementById('investor-list');
+        list.innerHTML = "";
+        investorsArray = [];
+        let totalVal = 0, totalProf = 0;
+
+        snap.forEach(d => {
+            const inv = d.data(); inv.id = d.id;
+            const growth = calculateQuantumGrowth(inv);
+            inv.currentTotal = growth.total;
+            investorsArray.push(inv);
+
+            totalVal += growth.total; totalProf += growth.profit;
+
+            list.innerHTML += `
+                <tr class="clickable">
+                    <td onclick="viewProfile('${inv.id}')"><b>${inv.name}</b><br><small>${inv.indexNumber}</small></td>
+                    <td><span class="badge badge-active">ACTIVE</span></td>
+                    <td>Rs. ${growth.principal.toLocaleString()}</td>
+                    <td style="color:var(--neon-green)">Rs. ${Math.round(growth.total).toLocaleString()}</td>
+                    <td style="color:var(--gold)">+ Rs. ${Math.round(growth.profit).toLocaleString()}</td>
+                    <td style="display:flex; gap:10px;">
+                        <button class="btn-p" onclick="openTopUp('${inv.id}','${inv.name}')" style="padding:5px 12px; font-size:0.7rem;">+ TOP-UP</button>
+                        <button onclick="removeItem('${inv.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash-alt"></i></button>
+                    </td>
+                </tr>`;
+        });
+
+        document.getElementById('total-invested').innerText = "Rs. " + Math.round(totalVal).toLocaleString();
+        document.getElementById('total-investor-profit').innerText = "Rs. " + Math.round(totalProf).toLocaleString();
+        document.getElementById('investor-count').innerText = snap.size;
+        updateMainChart(investorsArray);
+        const paySelect = document.getElementById('pay-inv-select');
+paySelect.innerHTML = '<option value="" disabled selected>Select an investor...</option>';
+
+snap.forEach(d => {
+    const inv = d.data();
+    paySelect.innerHTML += `<option value="${d.id}">${inv.name} (${inv.indexNumber})</option>`;
+});
+    });
+
+    const updateMainChart = (data) => {
+    const ctx = document.getElementById('futuristicChart').getContext('2d');
+    if(chartInstance) chartInstance.destroy();
+
+    // Create Gradient for the "Area" fill
+    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+    gradient.addColorStop(0, 'rgba(16, 185, 129, 0.4)'); // Neon Green top
+    gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');   // Transparent bottom
+
+    // Sort data by name or date if needed for a smoother line
+    const labels = data.map(i => i.name);
+    const totals = data.map(i => i.currentTotal);
+
+    chartInstance = new Chart(ctx, {
+        type: 'line', // Changed from 'bar' to 'line'
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Total Capital Value',
+                data: totals,
+                borderColor: '#10b981', // The neon line
+                borderWidth: 3,
+                fill: true,
+                backgroundColor: gradient,
+                tension: 0.4, // Makes the line curved/smooth like your image
+                pointBackgroundColor: '#030712', // Dark center for points
+                pointBorderColor: '#10b981',
+                pointBorderWidth: 2,
+                pointRadius: 5,
+                pointHoverRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)', // Subtle grid lines
+                        drawBorder: false
+                    },
+                    ticks: {
+                        color: '#9ca3af',
+                        callback: (value) => 'Rs.' + value.toLocaleString()
+                    }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#9ca3af' }
+                }
+            }
+        }
+    });
+};
+
+    // View Profile
+    window.viewProfile = (id) => {
+        const inv = investorsArray.find(x => x.id === id);
+        if(!inv) return;
+        document.getElementById('prof-name').innerText = inv.name;
+        document.getElementById('prof-due').innerText = "Rs. " + Math.round(inv.currentTotal).toLocaleString();
+        document.getElementById('prof-paid').innerText = "Rs. " + (inv.totalPaid || 0).toLocaleString();
+        document.getElementById('prof-id').innerText = `ID: ${inv.indexNumber}`;
+        document.getElementById('prof-initials').innerText = inv.name.charAt(0);
+        openModal('profile-modal');
+    };
+
+    // --- SIMULATOR LOGIC (PRESERVED) ---
     window.runSimulation = () => {
         const principal = Number(document.getElementById('sim-principal').value);
         const startDateInput = document.getElementById('sim-start-date').value;
@@ -406,104 +742,18 @@
         });
     };
 
-    // FIREBASE LISTENERS
-    onSnapshot(collection(db, "investors"), (snap) => {
-        const list = document.getElementById('investor-list');
-        const paySel = document.getElementById('pay-inv-select');
-        list.innerHTML = "";
-        paySel.innerHTML = `<option value="">Select Entity...</option>`;
-        investorsArray = [];
-        let totalVal = 0, totalProf = 0;
-
-        snap.forEach(d => {
-            const inv = d.data(); inv.id = d.id;
-            const growth = calculateQuantumGrowth(inv.amount, inv.timestamp);
-            inv.currentTotal = growth.total; inv.accruedProfit = growth.profit;
-            investorsArray.push(inv);
-            paySel.innerHTML += `<option value="${inv.id}">${inv.name}</option>`;
-            totalVal += growth.total; totalProf += growth.profit;
-
-            list.innerHTML += `
-                <tr class="clickable">
-                    <td onclick="viewProfile('${inv.id}')"><b>${inv.name}</b><br><small>${inv.indexNumber || 'ID'}</small></td>
-                    <td><span class="badge badge-active">ACTIVE</span></td>
-                    <td>Rs. ${inv.amount.toLocaleString()}</td>
-                    <td style="color:var(--neon-green)">Rs. ${Math.round(growth.total).toLocaleString()}</td>
-                    <td style="color:var(--gold)">+ Rs. ${Math.round(growth.profit).toLocaleString()}</td>
-                    <td><button onclick="removeItem('investors','${inv.id}')" style="background:none; border:none; color:var(--danger); cursor:pointer;"><i class="fas fa-trash-alt"></i></button></td>
-                </tr>`;
-        });
-
-        document.getElementById('total-invested').innerText = "Rs. " + Math.round(totalVal).toLocaleString();
-        document.getElementById('total-investor-profit').innerText = "Rs. " + Math.round(totalProf).toLocaleString();
-        document.getElementById('investor-count').innerText = snap.size;
-        updateMainChart(investorsArray);
-    });
-
-    const updateMainChart = (data) => {
-        const ctx = document.getElementById('futuristicChart').getContext('2d');
-        if(chartInstance) chartInstance.destroy();
-        const sorted = [...data].sort((a,b) => a.timestamp - b.timestamp);
-        const labels = sorted.map(i => new Date(i.timestamp).toLocaleDateString([], {month:'short', day:'numeric'}));
-        const totals = sorted.map(i => calculateQuantumGrowth(i.amount, i.timestamp).total);
-
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: { labels, datasets: [{ label: 'Global Capital', data: totals, borderColor: '#10b981', tension: 0.4 }] },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-    };
-
-    // MODAL UTILS
-    window.openModal = (id) => document.getElementById(id).style.display = 'flex';
-    window.closeModal = () => document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
-    window.removeItem = async (col, id) => { if(confirm("Terminate node?")) await deleteDoc(doc(db, col, id)); };
-
-   window.saveInvestor = async () => {
-    // 1. Get the raw ID and extract the last 5 digits for the password
-    const idNum = document.getElementById('inv-index').value;
-    const securityKey = idNum.toString().slice(-5); 
-
-    const data = {
-    name: document.getElementById('inv-name').value,
-    indexNumber: document.getElementById('inv-index').value,
-    password: document.getElementById('inv-index').value.slice(-5),
-    email: document.getElementById('inv-email').value,
-    address: document.getElementById('inv-address').value,
-    dob: document.getElementById('inv-dob').value,
-    amount: Number(document.getElementById('inv-amt').value), // Saved as Number
-    equity: Number(document.getElementById('inv-perc').value), // Saved as Number
-    totalPaid: 0, // Saved as Number
-    note: document.getElementById('inv-note').value,
-    timestamp: Date.now() // Saved as Number (Milliseconds)
-};
-    
-    // 2. Execute database write
-    try {
-        await addDoc(collection(db, "investors"), data);
-        closeModal();
-    } catch (e) {
-        console.error("Critical System Failure:", e);
-    }
-};
-    window.viewProfile = (id) => {
-        const inv = investorsArray.find(x => x.id === id);
-        if(!inv) return;
-        document.getElementById('prof-name').innerText = inv.name;
-        document.getElementById('prof-due').innerText = "Rs. " + Math.round(inv.currentTotal).toLocaleString();
-        document.getElementById('prof-paid').innerText = "Rs. " + (inv.totalPaid || 0).toLocaleString();
-        openModal('profile-modal');
-    };
-
-    window.zoomChart = () => {
-        openModal('chart-zoom-modal');
-        const ctx = document.getElementById('zoomedChart').getContext('2d');
-        if (zoomedChartInstance) zoomedChartInstance.destroy();
-        zoomedChartInstance = new Chart(ctx, { type: 'line', data: chartInstance.data, options: chartInstance.options });
-    };
-
     document.getElementById('sim-start-date').valueAsDate = new Date();
     setInterval(() => { document.getElementById('current-time').innerText = new Date().toLocaleTimeString(); }, 1000);
+    // --- SEARCH ENGINE ---
+document.getElementById('invSearch').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const rows = document.querySelectorAll('#investor-list tr');
+    
+    rows.forEach(row => {
+        const text = row.innerText.toLowerCase();
+        row.style.display = text.includes(term) ? '' : 'none';
+    });
+});
 </script>
 </body>
 </html>
